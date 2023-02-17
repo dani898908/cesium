@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="https://cesium.com/downloads/cesiumjs/releases/1.82/Build/Cesium/Cesium.js"></script>
+<link href="https://cesium.com/downloads/cesiumjs/releases/1.82/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+
+  <link href="style.css" rel="stylesheet">
+</head>
+<body>
+  <div id="cesiumContainer"></div>
+  <script>
+   // Grant CesiumJS access to your ion assets
+Cesium.Ion.defaultAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiJiNzBiYWU5Yy05ZDBlLTQ1ZDktYWFhOC1jZDBiMzNkZDIyMmQiLCJpZCI6MzAxMjcsInNjb3BlcyI6WyJhc3IiLCJnYyJdLCJpYXQiOjE1OTMxOTQ3Mzh9.nN7X2vvVPWRUCYbmDJi8YKy7WjFgAmBV4dWDnFP025I";
+const viewer = new Cesium.Viewer("cesiumContainer");
+
+const tileset = viewer.scene.primitives.add(
+  new Cesium.Cesium3DTileset({
+    url: Cesium.IonResource.fromAssetId(1549635),
+  })
+);
+
+(async () => {
+  try {
+    await tileset.readyPromise;
+    await viewer.zoomTo(tileset);
+
+    // Apply the default style if it exists
+    const extras = tileset.asset.extras;
+    if (
+      Cesium.defined(extras) &&
+      Cesium.defined(extras.ion) &&
+      Cesium.defined(extras.ion.defaultStyle)
+    ) {
+      tileset.style = new Cesium.Cesium3DTileStyle(extras.ion.defaultStyle);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+})();
+    
+  </script>
+</body>
+</html>
